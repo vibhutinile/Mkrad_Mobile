@@ -1,0 +1,45 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 34
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.0.21"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+
+// Enforce 16KB page size alignment for all native (.so) libraries to comply
+// with Google Play's requirement for apps targeting Android 15+ (API 35).
+// NDK r27+ sets -Wl,-z,max-page-size=16384 by default, so upgrading the NDK
+// above is sufficient; this block forwards a CMake define in case any module
+// gates 16KB behaviour on it.
+subprojects { subproject ->
+    def applyAlign = {
+        subproject.android {
+            defaultConfig {
+                externalNativeBuild {
+                    cmake {
+                        arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+                    }
+                }
+            }
+        }
+    }
+    pluginManager.withPlugin("com.android.application") { applyAlign() }
+    pluginManager.withPlugin("com.android.library") { applyAlign() }
+}

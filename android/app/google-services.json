@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "982510677632",
+    "project_id": "mkrad-4d940",
+    "storage_bucket": "mkrad-4d940.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982510677632:android:60c129ea612c8ff95ec065",
+        "android_client_info": {
+          "package_name": "com.mkradproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982510677632-dmvre9n19l3uh8ajp9jpeh49kvp9f6bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgq0A6e-eyFj71IvSJQnszWLbHOF9q27Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982510677632-dmvre9n19l3uh8ajp9jpeh49kvp9f6bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
