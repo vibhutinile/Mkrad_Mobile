@@ -69,8 +69,8 @@ android {
         applicationId "com.mkradproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 22
-        versionName "3.1"
+        versionCode 25
+        versionName "3.3"
         multiDexEnabled true
     }
 

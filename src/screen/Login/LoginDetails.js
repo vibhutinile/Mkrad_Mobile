@@ -259,32 +259,20 @@ class LoginPage extends React.Component {
         <ScrollView
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              backgroundColor: '#E8E8E8',
-              flexDirection: 'row',
-              height: 150,
-            }}>
+          <View style={styles.loginHeader}>
             <TouchableOpacity
               onPress={this.OnbackClick}
-              style={{
-                alignItems: 'center',
-                marginTop: '8%',
-                marginLeft: '5%',
-              }}>
+              activeOpacity={0.5}
+              style={styles.loginBack}>
               <Image source={require('./../../images/back.png')} />
             </TouchableOpacity>
-            <Image
-              style={{
-                width: '22%',
-                height: 100,
-                marginLeft: '26%',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                resizeMode: 'contain',
-              }}
-              source={require('./../../images/logo.png')}
-            />
+            <View style={styles.loginLogoWrap}>
+              <Image
+                style={styles.loginLogo}
+                source={require('./../../images/logo.png')}
+              />
+            </View>
+            <View style={styles.loginBack} />
           </View>
 
           <Card style={styles.CradContainer}>
@@ -496,6 +484,37 @@ class LoginPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  loginHeader: {
+    height: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  loginBack: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginLogoWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginLogo: {
+    width: 90,
+    height: 70,
+    resizeMode: 'contain',
+  },
   CradContainer: {
     shadowRadius: 10,
     borderRadius: 20,

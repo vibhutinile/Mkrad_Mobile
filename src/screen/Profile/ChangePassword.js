@@ -78,11 +78,15 @@ export default class ChangePassword extends React.Component {
             <Image source={require('../../images/back.png')} />
           </TouchableOpacity>
 
-          <View style={{marginTop: '14%'}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#000'}}>
-              Change Password
-            </Text>
-          </View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#898989',
+              marginLeft: 12,
+            }}>
+            Change Password
+          </Text>
         </View>
 
         <View style={{flex: 6}}>
@@ -146,19 +150,18 @@ export default class ChangePassword extends React.Component {
 
 const styles = StyleSheet.create({
   CradContainer: {
-    height: 120,
+    height: 80,
     flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    paddingHorizontal: 16,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
 
   CradContainer2: {
@@ -180,10 +183,10 @@ const styles = StyleSheet.create({
   },
 
   BackContainer: {
-    width: '15%',
-    height: '20%',
-    marginLeft: '5%',
-    marginTop: '13%',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   SectionStyle: {
     height: 45,

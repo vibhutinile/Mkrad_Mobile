@@ -4,28 +4,25 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
 
     CradContainer: {
-
-        height: 120,
+        height: 80,
         flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#fff',
-        borderRadius: 15,
-        shadowRadius: 30,
-        borderWidth: 0,
-        borderColor: '#ddd',
-        borderBottomWidth: 0,
+        borderBottomLeftRadius: 16,
+        borderBottomRightRadius: 16,
+        paddingHorizontal: 16,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 3,
-        elevation: 5,
-
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        elevation: 4,
     },
 
     BackContainer: {
-        width: "15%",
-        height: "20%",
-        marginLeft: "5%",
-        marginTop: "13%",
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     NotificationContainer: {
@@ -41,25 +38,25 @@ const styles = StyleSheet.create({
     },
 
     JobItemContainer: {
-        width: 350,
-        marginTop: "6%",
+        width: '92%',
+        marginTop: 16,
+        marginBottom: 6,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
         backgroundColor: '#fff',
         alignSelf: 'center',
         borderRadius: 14,
-        borderColor: '#ddd',
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 3,
-        elevation: 5,
-        shadowRadius: 10,
-        marginBottom: 10
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+        elevation: 4,
     },
 
     JobNotes: {
 
-        width: 350,
-        height: 130,
+        width: '92%',
+        minHeight: 130,
         marginTop: "6%",
         backgroundColor: '#fff',
         alignSelf: 'center',
@@ -132,10 +129,8 @@ const styles = StyleSheet.create({
 
     TextContainer_4: {
         fontSize: 18,
-        marginTop: "0%",
-        alignSelf: 'center',
         color: '#000',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     // TextContainer_5: {
     //     fontWeight: 'bold',
@@ -147,7 +142,6 @@ const styles = StyleSheet.create({
     TextContainer_15: {
         fontWeight: 'bold',
         fontSize: 12,
-        marginTop: "0%",
         color: '#898989',
     },
     TextContainer_6: {
@@ -208,9 +202,7 @@ const styles = StyleSheet.create({
     TextContainer_enddate: {
         fontWeight: 'bold',
         fontSize: 12,
-        marginTop: 5,
         color: '#898989',
-
     },
     RectangleContainer_3: {
         width: "70%",
@@ -218,16 +210,16 @@ const styles = StyleSheet.create({
         borderColor: '#3AB34A',
         borderWidth: 2,
         alignItems: 'center',
-        height: 35,
+        minHeight: 44,
         flexDirection: 'row',
-        marginBottom: 35
+        marginBottom: 35,
+        justifyContent: 'space-around',
+        overflow: 'hidden'
     },
     TextContainer_5: {
         fontWeight: 'bold',
         fontSize: 12,
-        marginTop: "2%",
         color: '#898989',
-
     },
 
     serviceName: {
@@ -261,7 +253,7 @@ const styles = StyleSheet.create({
 
         height: 0.5,
         backgroundColor: '#EAEAEA',
-        marginTop: "4%",
+        marginTop: "0%",
         marginBottom: 10
 
 

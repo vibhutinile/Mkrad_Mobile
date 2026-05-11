@@ -5,9 +5,9 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import {clearAsyncStorage} from '../../Routes/AsynstorageClass';
 import {getAsyncStorage} from '../../Routes/AsynstorageClass';
@@ -363,34 +363,34 @@ class ProfileScreen extends React.Component {
         <Loader isLoader={this.state.loading}></Loader>
         <View style={{height: '100%'}}>
           <View style={styles.CradContainer}>
-            <View style={{flex: 1, flexDirection: 'column'}}>
-              <Image
-                style={styles.MkradContainer}
-                source={require('../../images/logo.png')}
-              />
-              <View style={styles.RectangleContainer}>
-                <Text
-                  style={{
-                    marginTop: 10,
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    color: '#fff',
-                  }}>
-                  My Profile
-                </Text>
-              </View>
-            </View>
             <TouchableOpacity
-              style={{position: 'absolute', marginTop: '13%', right: '5%'}}
+              style={styles.NotificationButton}
               onPress={() =>
                 this.props.navigation.navigate('DashboardNotification')
               }>
-              <Image source={require('../../images/notification.png')} />
+              <Image
+                style={styles.NotificationIcon}
+                source={require('../../images/notification.png')}
+              />
             </TouchableOpacity>
+            <Image
+              style={styles.MkradContainer}
+              source={require('../../images/logo.png')}
+            />
+            <View style={styles.RectangleContainer}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#fff',
+                }}>
+                My Profile
+              </Text>
+            </View>
           </View>
           <ScrollView>
             <View style={styles.Checkout}>
-              <View style={{flexDirection: 'row', marginTop: '3%'}}>
+              <View style={{flexDirection: 'row', marginTop: 24}}>
                 <TouchableOpacity
                   style={styles.crewMemberCheckIn}
                   onPress={this.checkIn}>
@@ -404,116 +404,36 @@ class ProfileScreen extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: '1%',
-                  marginBottom: 60,
+                  marginTop: 12,
+                  marginBottom: 24,
                 }}>
-                <View>
-                  {this.state.checkInTime == 'null' ||
-                  this.state.checkInTime == '' ||
-                  this.state.checkInTime == null ? (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginRight: '5%',
-                        marginHorizontal: 10,
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      00:00:00
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginRight: '5%',
-                        marginHorizontal: 10,
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      {this.state.checkInTime.replace(/['"]+/g, '')}
-                    </Text>
-                  )}
-                  {this.state.checkInDate == 'null' ||
-                  this.state.checkInDate == '' ||
-                  this.state.checkInDate == null ? (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginRight: '5%',
-                        marginHorizontal: 10,
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      00:00:00
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginRight: '5%',
-                        marginHorizontal: 10,
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      {this.state.checkInDate.replace(/['"]+/g, '')}
-                    </Text>
-                  )}
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <Text style={styles.attendanceTime}>
+                    {!this.state.checkInTime ||
+                    this.state.checkInTime === 'null'
+                      ? '00:00:00'
+                      : this.state.checkInTime.replace(/['"]+/g, '')}
+                  </Text>
+                  <Text style={styles.attendanceTime}>
+                    {!this.state.checkInDate ||
+                    this.state.checkInDate === 'null'
+                      ? '00:00:00'
+                      : this.state.checkInDate.replace(/['"]+/g, '')}
+                  </Text>
                 </View>
-                <View>
-                  {this.state.checkOutTime == 'null' ||
-                  this.state.checkOutTime == '' ||
-                  this.state.checkOutTime == null ? (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginLeft: '18%',
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      00:00:00
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginLeft: '18%',
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      {this.state.checkOutTime.replace(/['"]+/g, '')}
-                    </Text>
-                  )}
-                  {this.state.checkOutDate == 'null' ||
-                  this.state.checkOutDate == '' ||
-                  this.state.checkOutDate == null ? (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginLeft: '18%',
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      00:00:00
-                    </Text>
-                  ) : (
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        fontSize: 14,
-                        marginLeft: '18%',
-                        marginTop: 10,
-                        marginBottom: '8%',
-                      }}>
-                      {this.state.checkOutDate.replace(/['"]+/g, '')}
-                    </Text>
-                  )}
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <Text style={styles.attendanceTime}>
+                    {!this.state.checkOutTime ||
+                    this.state.checkOutTime === 'null'
+                      ? '00:00:00'
+                      : this.state.checkOutTime.replace(/['"]+/g, '')}
+                  </Text>
+                  <Text style={styles.attendanceTime}>
+                    {!this.state.checkOutDate ||
+                    this.state.checkOutDate === 'null'
+                      ? '00:00:00'
+                      : this.state.checkOutDate.replace(/['"]+/g, '')}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -544,62 +464,48 @@ class ProfileScreen extends React.Component {
             <View style={styles.CradContainer2}>
               <Text
                 style={{
-                  marginTop: 10,
                   fontWeight: 'bold',
                   fontSize: 18,
-                  alignSelf: 'center',
+                  color: '#000',
                 }}>
                 {this.state.username}
               </Text>
-              <Text
-                style={{fontSize: 16, color: '#3AB34A', alignSelf: 'center'}}>
-                {' '}
+              <Text style={{fontSize: 16, color: '#3AB34A', marginTop: 4}}>
                 Crew lead
               </Text>
 
-              <View
-                style={{
-                  height: 30,
-                  backgroundColor: '#F4F4F4',
-                  alignItems: 'center',
-                  marginTop: '5%',
-                  width: '100%',
-                  borderRadius: 10,
-                }}>
-                <Text style={{fontSize: 14, alignSelf: 'center'}}>
+              <View style={styles.infoBox}>
+                <Text style={{fontSize: 14, color: '#000', marginBottom: 4}}>
                   {this.state.email_id}
                 </Text>
-                <Text style={{fontSize: 14, color: '#000000'}}>
+                <Text style={{fontSize: 14, color: '#000'}}>
                   {this.formatPhoneNumber(this.state.phoneNo)}
                 </Text>
               </View>
             </View>
 
             <TouchableOpacity
+              style={{paddingVertical: 12, alignItems: 'center'}}
               onPress={() => this.props.navigation.navigate('ChangePassword')}>
               <Text
                 style={{
                   fontSize: 16,
-                  alignSelf: 'center',
                   color: '#000000',
-                  marginTop: '5%',
                   fontWeight: 'bold',
                 }}>
-                {' '}
                 Change password
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={this.toggleModal}>
+            <TouchableOpacity
+              style={{paddingVertical: 12, alignItems: 'center'}}
+              onPress={this.toggleModal}>
               <Text
                 style={{
                   fontSize: 16,
-                  alignSelf: 'center',
                   color: '#000000',
-                  marginTop: '3%',
                   fontWeight: 'bold',
                 }}>
-                {' '}
                 Logout
               </Text>
             </TouchableOpacity>
@@ -616,44 +522,41 @@ class ProfileScreen extends React.Component {
               </Text>
             </TouchableOpacity>
           </ScrollView>
-          <View
-            style={{
-              backgroundColor: '#222441',
-              height: 84,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View style={styles.Bottombar}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Dashboard')}
-                style={{alignItems: 'center', alignSelf: 'center'}}>
-                <Image
-                  style={{width: 25, height: 25}}
-                  source={require('../../images/ic_home.png')}
-                />
-              </TouchableOpacity>
+          <SafeAreaView
+            edges={['bottom']}
+            style={{backgroundColor: '#222441'}}>
+            <View
+              style={{
+                backgroundColor: '#222441',
+                height: 84,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={styles.Bottombar}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Dashboard')}
+                  style={{alignItems: 'center', alignSelf: 'center'}}>
+                  <Image
+                    style={{width: 25, height: 25}}
+                    source={require('../../images/ic_home.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.Bottombar}>
+                {/* calendar slot */}
+              </View>
+              <View style={styles.Bottombar}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Profile')}
+                  style={{alignItems: 'center', alignSelf: 'center'}}>
+                  <Image
+                    style={{width: 25, height: 25}}
+                    source={require('../../images/ic_user.png')}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.Bottombar}>
-              {/* <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('CalenderScreen')}
-                style={{alignItems: 'center', alignSelf: 'center'}}>
-                <Image
-                  style={{width: 25, height: 25}}
-                  source={require('../../images/ic_calendar.png')}
-                />
-              </TouchableOpacity> */}
-            </View>
-            <View style={styles.Bottombar}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Profile')}
-                style={{alignItems: 'center', alignSelf: 'center'}}>
-                <Image
-                  style={{width: 25, height: 25}}
-                  source={require('../../images/ic_user.png')}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+          </SafeAreaView>
 
           <Modal isVisible={this.state.isModalVisible}>
             <View style={styles.JonMarked_Completed_Modal}>
@@ -873,19 +776,34 @@ class ProfileScreen extends React.Component {
 
 const styles = StyleSheet.create({
   CradContainer: {
-    height: '20%',
-    flexDirection: 'row',
+    height: 220,
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
     elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 28,
+  },
+  NotificationButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+  NotificationIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
   RectangleContainer2: {
     width: '55%',
@@ -943,66 +861,66 @@ const styles = StyleSheet.create({
   },
 
   CradContainer2: {
-    height: '20%',
     flexDirection: 'column',
     backgroundColor: '#fff',
     borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
-    marginTop: '5%',
-    marginLeft: '10%',
-    marginRight: '10%',
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+    marginTop: 24,
+    marginHorizontal: 24,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
     alignItems: 'center',
   },
   Checkout: {
-    height: '20%',
     flexDirection: 'column',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    marginTop: '10%',
-    marginLeft: '10%',
-    marginRight: '10%',
-    alignItems: 'center',
+    marginTop: 24,
+    marginHorizontal: 24,
+    alignItems: 'stretch',
   },
   puchText: {
     color: '#fff',
     fontSize: 14,
+    fontWeight: 'bold',
   },
   crewMemberCheckIn: {
-    width: '30%',
-    height: 40,
+    flex: 1,
+    height: 44,
     backgroundColor: '#839041',
-    marginTop: '2%',
-    borderRadius: 14,
-    borderColor: '#ddd',
-    shadowRadius: 3,
-    elevation: 5,
-    marginLeft: '5%',
+    borderRadius: 22,
+    elevation: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    marginHorizontal: 30,
+    marginRight: 8,
   },
   ViewBg: {
-    width: '30%',
-    height: 40,
+    flex: 1,
+    height: 44,
     backgroundColor: '#F94B4C',
-    marginTop: '2%',
-    borderRadius: 14,
-    shadowRadius: 3,
-    elevation: 2,
-    marginLeft: '5%',
+    borderRadius: 22,
+    elevation: 3,
+    marginLeft: 8,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+  },
+  attendanceTime: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginTop: 8,
+    color: '#000',
+  },
+  infoBox: {
+    backgroundColor: '#F4F4F4',
+    alignItems: 'center',
+    marginTop: 12,
+    width: '100%',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   MenuContainer: {
     marginLeft: 20,
@@ -1011,30 +929,28 @@ const styles = StyleSheet.create({
     height: 30,
   },
   MkradContainer: {
-    width: '25%',
-    height: '45%',
-    marginTop: '14%',
-    marginLeft: '37%',
+    width: 140,
+    height: 140,
+    alignSelf: 'center',
     resizeMode: 'contain',
+    marginTop: 8,
   },
 
   RectangleContainer: {
-    width: '55%',
-    height: '25%',
+    width: '50%',
+    height: 44,
     backgroundColor: '#3AB34A',
     alignSelf: 'center',
-    borderRadius: 14,
-    borderColor: '#ddd',
+    borderRadius: 22,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
-    shadowRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
-    bottom: '-13%',
-    right: '20%',
+    bottom: -22,
   },
 
   NotificationConrainer: {

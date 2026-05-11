@@ -178,6 +178,11 @@ class NewJobAssign extends React.Component {
     zipcode,
     lat,
     long,
+    totalBags,
+    mulchName,
+    turfName,
+    images,
+    baseUrl,
   ) => {
     if (job_date == null) {
       job_date = '00:00';
@@ -197,6 +202,11 @@ class NewJobAssign extends React.Component {
       zipcode: zipcode,
       lat,
       long,
+      totalBags,
+      mulchName,
+      turfName,
+      images,
+      baseUrl,
     });
   };
   onPauseScreen = (
@@ -305,11 +315,15 @@ class NewJobAssign extends React.Component {
             style={styles.BackContainer}>
             <Image source={require('../../images/back.png')} />
           </TouchableOpacity>
-          <View style={{alignSelf: 'center', marginTop: 18, marginLeft: 15}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#898989'}}>
-              Scheduled Jobs
-            </Text>
-          </View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#898989',
+              marginLeft: 12,
+            }}>
+            Scheduled Jobs
+          </Text>
         </View>
         <View style={{flex: 5}}>
           <View>
@@ -318,18 +332,24 @@ class NewJobAssign extends React.Component {
           <FlatList
             data={this.state.customerJobList}
             renderItem={({item}) => {
+              console.log('[ScheduledItem]', {
+                id: item?.id,
+                mulch: item?.mulch,
+                turf: item?.turf,
+                bags_schedule: item?.parent_job?.schedule?.total_bags,
+                bags_customer: item?.parent_job?.customer?.total_bags,
+                top_level_keys: Object.keys(item || {}),
+              });
               return (
                 <View style={styles.JobItemContainer}>
-                  <View style={{marginLeft: 20}}>
-                    <View style={{flexDirection: 'row', marginTop: '5%'}}>
+                  <View>
+                    <View style={{flexDirection: 'row'}}>
                       <Text style={styles.TextContainer_4}>
-                        {' '}
-                        {item?.parent_job?.customer?.name}{' '}
+                        {item?.parent_job?.customer?.name}
                       </Text>
-                      {/* <Text style={styles.TextContainer_4}> {item.id} </Text> */}
                     </View>
                     <this.Separator />
-                    <View style={{flexDirection: 'row', marginTop: '2%'}}>
+                    <View style={{flexDirection: 'row', marginTop: 4}}>
                       <TouchableOpacity
                         onPress={() =>
                           this.addressLink(
@@ -424,25 +444,30 @@ class NewJobAssign extends React.Component {
                       {item?.parent_job?.schedule?.note}
                     </Text>
                     <this.Separator />
-                    {item.mulch != '' || item.mulch != null ? (
-                      <Text style={styles.TextContainer_5}>
-                        Mulch:{' '}
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.TextContainer_5}> Mulch</Text>
                         <Text style={styles.TextContainer_6}>
                           {' '}
-                          {item?.mulch?.name}
+                          {item?.mulch?.name || 'N/A'}
                         </Text>
-                      </Text>
-                    ) : null}
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.TextContainer_5}> Amount</Text>
+                        <Text style={styles.TextContainer_6}>
+                          {' '}
+                          {item?.parent_job?.schedule?.total_bags ??
+                            item?.parent_job?.customer?.total_bags ??
+                            'N/A'}
+                        </Text>
+                      </View>
+                    </View>
                     <this.Separator />
-                    {item.turf != '' || item.turf != null ? (
-                      <Text style={styles.TextContainer_5}>
-                        Turf:{' '}
-                        <Text style={styles.TextContainer_6}>
-                          {' '}
-                          {item?.turf?.name}
-                        </Text>
-                      </Text>
-                    ) : null}
+                    <Text style={styles.TextContainer_5}> Turf</Text>
+                    <Text style={styles.TextContainer_6}>
+                      {' '}
+                      {item?.turf?.name || 'N/A'}
+                    </Text>
                     <this.Separator />
 
                     {item.species?.length > 0 &&
@@ -513,6 +538,12 @@ class NewJobAssign extends React.Component {
                                     item.parent_job.customer.zipcode,
                                     item.parent_job.customer.latitude,
                                     item.parent_job.customer.longitude,
+                                    item?.parent_job?.schedule?.total_bags ??
+                                      item?.parent_job?.customer?.total_bags,
+                                    item?.mulch?.name,
+                                    item?.turf?.name,
+                                    item?.images,
+                                    item?.base_url,
                                   )
                                 }
                                 style={styles.TextContainer_9}>
@@ -534,16 +565,21 @@ class NewJobAssign extends React.Component {
                           </>
                           <TouchableOpacity
                             onPress={() => {
-                              if (item.pdf_doc) {
-                                const url = `${item?.base_url}/${item.pdf_doc}`;
-                                // checkPermission(url);
-                                // Toast.show('Downloading..');
-                                //  Linking.openURL(url);
+                              const pdfUrl =
+                                item?.base_url && item?.pdf_doc
+                                  ? `${item.base_url}/${item.pdf_doc}`
+                                  : null;
+                              console.log('[ViewPDF] NewJob#1', {
+                                base_url: item?.base_url,
+                                pdf_doc: item?.pdf_doc,
+                                pdfUrl,
+                              });
+                              if (pdfUrl) {
                                 this.props.navigation.navigate('MyPDFViewer', {
-                                  pdfUrl: `${item?.base_url}/${item.pdf_doc}`,
+                                  pdfUrl,
                                 });
                               } else {
-                                Toast.show('Url not found');
+                                Toast.show('PDF URL not found');
                               }
                             }}
                             style={[styles.TextContainer_9]}>
@@ -559,15 +595,18 @@ class NewJobAssign extends React.Component {
                           <TextInput
                             editable={false}
                             placeholder="select time"
+                            textAlignVertical="center"
+                            includeFontPadding={false}
                             style={{
-                              marginLeft: '13%',
+                              flex: 1,
                               color: '#000',
                               fontSize: 14,
-                              padding: 5,
+                              paddingHorizontal: 10,
+                              paddingVertical: 0,
                             }}
                             value={this.state.currentTime}></TextInput>
                           <Image
-                            style={{marginLeft: '35%', width: 30, height: 30}}
+                            style={{width: 24, height: 24, marginRight: 8}}
                             source={require('../../images/time.png')}
                           />
                         </View>
@@ -622,19 +661,22 @@ class NewJobAssign extends React.Component {
                           {item.pdf_doc && (
                             <TouchableOpacity
                               onPress={() => {
-                                if (item.pdf_doc) {
-                                  // const url = `${item?.base_url}/${item.pdf_doc}`;
-                                  // checkPermission(url);
-                                  // Toast.show('Downloading..');
-                                  //  Linking.openURL(url);
+                                const pdfUrl =
+                                  item?.base_url && item?.pdf_doc
+                                    ? `${item.base_url}/${item.pdf_doc}`
+                                    : null;
+                                console.log('[ViewPDF] NewJob#2', {
+                                  base_url: item?.base_url,
+                                  pdf_doc: item?.pdf_doc,
+                                  pdfUrl,
+                                });
+                                if (pdfUrl) {
                                   this.props.navigation.navigate(
                                     'MyPDFViewer',
-                                    {
-                                      pdfUrl: `${item?.base_url}/${item.pdf_doc}`,
-                                    },
+                                    {pdfUrl},
                                   );
                                 } else {
-                                  Toast.show('Url not found');
+                                  Toast.show('PDF URL not found');
                                 }
                               }}
                               style={styles.TextContainer_9}>
@@ -681,6 +723,12 @@ class NewJobAssign extends React.Component {
         item?.parent_job?.customer.zipcode,
         item?.parent_job?.customer.latitude,
         item?.parent_job?.customer.longitude,
+        item?.parent_job?.schedule?.total_bags ??
+          item?.parent_job?.customer?.total_bags,
+        item?.mulch?.name,
+        item?.turf?.name,
+        item?.images,
+        item?.base_url,
       );
     }
   }

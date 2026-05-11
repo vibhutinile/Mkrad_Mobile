@@ -1,4 +1,7 @@
 import React from 'react';
+import {StatusBar, Platform} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import AppNavigation from './src/Routes/AppNavigation';
 import {setAsyncStorage} from './src/Routes/AsynstorageClass';
 
@@ -45,6 +48,17 @@ export default class App extends React.Component {
   }
 
   render() {
-    return <AppNavigation />;
+    return (
+      <GestureHandlerRootView style={{flex: 1}}>
+        <SafeAreaProvider>
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent={true}
+          />
+          <AppNavigation />
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    );
   }
 }

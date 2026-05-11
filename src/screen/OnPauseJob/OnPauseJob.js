@@ -11,7 +11,12 @@ import {
 import styles from './styles';
 import AppLoader, {loaderRef} from '../../Routes/AppLoader';
 import {showLoader, hideLoader} from '../../Routes/AppLoader';
-import {crewlaedPausejob_list, requestGetApi} from '../../NetworkCall/Service';
+import {
+  crewlaedPausejob_list,
+  mulch_ids,
+  turf_ids,
+  requestGetApi,
+} from '../../NetworkCall/Service';
 import {getAsyncStorage} from '../../Routes/AsynstorageClass';
 import {TextInput} from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -22,6 +27,7 @@ import {
 } from '../../NetworkCall/Service';
 import moment from 'moment';
 import GallaryImages from '../../components/pagination/GallaryImages';
+import PageNumber from '../../components/pagination/PageNumber';
 import {checkPermission} from '../../utils';
 import Toast from 'react-native-simple-toast';
 import Loader from '../../NetworkCall/Loader';
@@ -36,14 +42,19 @@ class OnPauseScreen extends React.Component {
     this.state = {
       customerJobList: [],
       PageNo: 1,
+      numberofPage: 0,
+      loading: false,
       oneTimeSelected_time: '',
       isTimePickerVisible: false,
       endTimeSelected_time: '',
       isEndTimePickerVisible: false,
       currentTime: '',
+      mulchMap: {},
+      turfMap: {},
     };
   }
   componentDidMount() {
+    this.fetchLookups();
     let unsubscribe = this.props.navigation.addListener('focus', () => {
       current_time = moment().format('hh:mm A');
       var CurrentDate = moment().toISOString();
@@ -52,28 +63,57 @@ class OnPauseScreen extends React.Component {
       this.get_JobList();
     });
   }
+  async fetchLookups() {
+    try {
+      const token = await getAsyncStorage('token');
+      const [mulchRes, turfRes] = await Promise.all([
+        requestGetApi(mulch_ids, {}, 'GET', token),
+        requestGetApi(turf_ids, {}, 'GET', token),
+      ]);
+      const toMap = (resp) => {
+        const list =
+          resp?.responseJson?.data?.data || resp?.responseJson?.data || [];
+        const map = {};
+        if (Array.isArray(list)) {
+          list.forEach((it) => {
+            if (it && it.id != null) map[it.id] = it.name;
+          });
+        }
+        return map;
+      };
+      this.setState({mulchMap: toMap(mulchRes), turfMap: toMap(turfRes)});
+    } catch (e) {
+      console.log('[Lookups] failed:', e?.message);
+    }
+  }
   componentWillUnmount() {
     hideLoader();
   }
-  async get_JobList() {
+  async get_JobList(page) {
     let token = await getAsyncStorage('token');
-    const body = {
-      page: this.state.PageNo,
-    };
+    const body = {};
+    this.setState({loading: true});
+    const list_url =
+      page && page !== 1
+        ? `${crewlaedPausejob_list}?page=${page}`
+        : crewlaedPausejob_list;
     const {responseJson, err} = await requestGetApi(
-      crewlaedPausejob_list,
+      list_url,
       body,
       'GET',
       token,
     );
     hideLoader();
-    if (responseJson.status) {
-      jobList = responseJson.data.data;
+    this.setState({loading: false});
+    if (responseJson?.status) {
+      jobList = responseJson.data.data || [];
       let arr = jobList.filter(function (item) {
         return item.api_job_scheduler_details != null;
       });
-      this.setState({customerJobList: this.state.customerJobList.concat(arr)});
-      this.setState({loading: false});
+      this.setState({
+        customerJobList: arr,
+        numberofPage: responseJson.data.last_page,
+      });
     }
   }
   Separator = () => <View style={styles.separator} />;
@@ -129,11 +169,15 @@ class OnPauseScreen extends React.Component {
             style={styles.BackContainer}>
             <Image source={require('../../images/back.png')} />
           </TouchableOpacity>
-          <View style={{marginTop: 18, marginLeft: 15, marginTop: '16%'}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#898989'}}>
-              Paused Jobs
-            </Text>
-          </View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#898989',
+              marginLeft: 12,
+            }}>
+            Paused Jobs
+          </Text>
         </View>
         <View style={{flex: 5}}>
           <View>
@@ -143,19 +187,17 @@ class OnPauseScreen extends React.Component {
             data={this.state.customerJobList}
             renderItem={({item, index}) => (
               <View style={styles.JobItemContainer}>
-                <View style={{marginLeft: 20}}>
-                  <View style={{flexDirection: 'row', marginTop: '5%'}}>
+                <View>
+                  <View style={{flexDirection: 'row'}}>
                     <Text style={styles.TextContainer_4}>
-                      {' '}
-                      {item.api_job_scheduler_details.customer.name}{' '}
+                      {item.api_job_scheduler_details.customer.name}
                     </Text>
                   </View>
 
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginTop: 10,
-                      marginBottom: -5,
+                      marginTop: 4,
                     }}>
                     <TouchableOpacity
                       onPress={() =>
@@ -203,8 +245,6 @@ class OnPauseScreen extends React.Component {
                     </Text>
                   )}
                   <this.Separator />
-
-                  <this.Separator />
                   <TouchableOpacity
                     onPress={() =>
                       this.dialCall(
@@ -235,198 +275,206 @@ class OnPauseScreen extends React.Component {
                     {item.api_job_scheduler_details.note}
                   </Text>
                   <this.Separator />
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.TextContainer_5}> Mulch</Text>
+                      <Text style={styles.TextContainer_6}>
+                        {' '}
+                        {item?.api_job_scheduler_details?.mulch?.name ||
+                          this.state?.mulchMap?.[
+                            item?.api_job_scheduler_details?.mulch_id
+                          ] ||
+                          (item?.api_job_scheduler_details?.mulch_id
+                            ? `#${item.api_job_scheduler_details.mulch_id}`
+                            : 'N/A')}
+                      </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.TextContainer_5}> Amount</Text>
+                      <Text style={styles.TextContainer_6}>
+                        {' '}
+                        {item?.api_job_scheduler_details?.total_bags ??
+                          item?.api_job_scheduler_details?.customer
+                            ?.total_bags ??
+                          'N/A'}
+                      </Text>
+                    </View>
+                  </View>
+                  <this.Separator />
+                  <Text style={styles.TextContainer_5}> Turf</Text>
+                  <Text style={styles.TextContainer_6}>
+                    {' '}
+                    {item?.api_job_scheduler_details?.turf?.name ||
+                      this.state?.turfMap?.[
+                        item?.api_job_scheduler_details?.turf_id
+                      ] ||
+                      (item?.api_job_scheduler_details?.turf_id
+                        ? `#${item.api_job_scheduler_details.turf_id}`
+                        : 'N/A')}
+                  </Text>
+                  <this.Separator />
 
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 10,
-                      alignItems: 'center',
-                    }}>
-                    {item.job_start_time == '' ||
-                    item.job_start_time == null ? (
-                      <View>
-                        <Text style={styles.TextContainer_enddate}>
-                          Start Time
-                        </Text>
-                        <View style={styles.RectangleContainer_3}>
-                          <TextInput
-                            editable={false}
-                            placeholder="select time"
-                            style={{
-                              marginLeft: '13%',
-                              color: '#000',
-                              fontSize: 14,
-                              padding: 5,
-                            }}
-                            value={this.state.currentTime}></TextInput>
-                          <Image
-                            style={{marginLeft: '35%', width: 30, height: 30}}
-                            source={require('../../images/time.png')}
-                          />
-                        </View>
-                        {/* <TouchableOpacity style={styles.RectangleContainer_3}
-                                                    onPress={this.showTimePicker} >
-                                                    <TextInput editable={false}
-                                                        placeholder="select time"
-                                                        style={{ marginLeft: "3%", color: '#000', fontSize: 14, padding: 5 }}
-                                                        value={this.state.oneTimeSelected_time} ></TextInput>
-                                                    <DateTimePickerModal
-                                                        isVisible={this.state.isTimePickerVisible}
-                                                        mode="time"
-                                                        headerTextIOS=""
-                                                        onConfirm={this.handleTimePicked}
-                                                        onCancel={this.hideTimePicker}
-                                                        amPmAriaLabel="Select AM/PM"
-                                                        is24Hour={false}
-                                                    />
-                                                    <Image style={{ width: 30, height: 30 }} source={require('../../images/time.png')} />
-                                                </TouchableOpacity> */}
-                        <GallaryImages
-                          baseUlr={item?.base_url}
-                          images={item?.images}
-                        />
-                        <View
+                  {item.job_start_time == '' ||
+                  item.job_start_time == null ? (
+                    <>
+                      <Text style={styles.TextContainer_enddate}>
+                        Start Time
+                      </Text>
+                      <View style={styles.RectangleContainer_3}>
+                        <TextInput
+                          editable={false}
+                          placeholder="select time"
+                          textAlignVertical="center"
+                          includeFontPadding={false}
                           style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                          }}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              this.onGoingScreen(
-                                item.api_job_scheduler_details.customer.name,
-                                item.api_job_scheduler_details.customer
-                                  .address_line_1,
-                                item.api_job_scheduler_details.customer
-                                  .address_line_2,
-                                item.api_job_scheduler_details.customer.phone,
-                                item.api_job_scheduler_details.service.name,
-                                item.api_job_scheduler_details.start_time,
-                                item.api_job_scheduler_details.end_time,
-                                item.id,
-                                item.job_date,
-                                item.api_job_scheduler_details.note,
-                                item.api_job_scheduler_details.customer.city,
-                                item.api_job_scheduler_details.customer.state,
-                                item.api_job_scheduler_details.customer.zipcode,
-                              )
+                            flex: 1,
+                            color: '#000',
+                            fontSize: 14,
+                            paddingHorizontal: 10,
+                            paddingVertical: 0,
+                          }}
+                          value={this.state.currentTime}></TextInput>
+                        <Image
+                          style={{width: 24, height: 24, marginRight: 8}}
+                          source={require('../../images/time.png')}
+                        />
+                      </View>
+                      <GallaryImages
+                        baseUlr={item?.base_url}
+                        images={item?.images}
+                      />
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginTop: 20,
+                          width: '100%',
+                        }}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.onGoingScreen(
+                              item.api_job_scheduler_details.customer.name,
+                              item.api_job_scheduler_details.customer
+                                .address_line_1,
+                              item.api_job_scheduler_details.customer
+                                .address_line_2,
+                              item.api_job_scheduler_details.customer.phone,
+                              item.api_job_scheduler_details.service.name,
+                              item.api_job_scheduler_details.start_time,
+                              item.api_job_scheduler_details.end_time,
+                              item.id,
+                              item.job_date,
+                              item.api_job_scheduler_details.note,
+                              item.api_job_scheduler_details.customer.city,
+                              item.api_job_scheduler_details.customer.state,
+                              item.api_job_scheduler_details.customer.zipcode,
+                            )
+                          }
+                          style={styles.TextContainer_9}>
+                          <Text
+                            style={styles.TextContainer_10}
+                            numberOfLines={1}>
+                            Start Job
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const pdfUrl =
+                              item?.base_url && item?.pdf_doc
+                                ? `${item.base_url}/${item.pdf_doc}`
+                                : null;
+                            if (pdfUrl) {
+                              this.props.navigation.navigate('MyPDFViewer', {
+                                pdfUrl,
+                              });
+                            } else {
+                              Toast.show('PDF URL not found');
                             }
-                            style={styles.TextContainer_9}>
-                            <Text style={styles.TextContainer_10}>
-                              {' '}
-                              Start Job
-                            </Text>
-                          </TouchableOpacity>
+                          }}
+                          style={styles.TextContainer_9}>
+                          <Text style={styles.pdfText} numberOfLines={1}>
+                            View PDF
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={styles.TextContainer_enddate}>End Time</Text>
+                      <View style={styles.RectangleContainer_3}>
+                        <TextInput
+                          editable={false}
+                          placeholder="select time"
+                          textAlignVertical="center"
+                          includeFontPadding={false}
+                          style={{
+                            flex: 1,
+                            color: '#000',
+                            fontSize: 14,
+                            paddingHorizontal: 10,
+                            paddingVertical: 0,
+                          }}
+                          value={this.state.currentTime}></TextInput>
+                        <Image
+                          style={{width: 24, height: 24, marginRight: 8}}
+                          source={require('../../images/time.png')}
+                        />
+                      </View>
+                      <GallaryImages
+                        baseUlr={item?.base_url}
+                        images={item?.images}
+                      />
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginTop: 20,
+                          width: '100%',
+                        }}>
+                        <TouchableOpacity
+                          onPress={() => this.completejob(item.id)}
+                          style={styles.TextContainer_9}>
+                          <Text
+                            style={styles.TextContainer_10}
+                            numberOfLines={1}>
+                            Complete Job
+                          </Text>
+                        </TouchableOpacity>
+                        {item.pdf_doc && (
                           <TouchableOpacity
                             onPress={() => {
-                              // const url = `${item?.base_url}/${item.pdf_doc}`;
-                              // checkPermission(url);
-                              // Toast.show('Downloading..');
-                              // Linking.openURL(
-                              //   `${item?.base_url}/${item.pdf_doc}`,
-                              // );
-                              this.props.navigation.navigate('MyPDFViewer', {
-                                pdfUrl: `${item?.base_url}/${item.pdf_doc}`,
-                              });
+                              const pdfUrl =
+                                item?.base_url && item?.pdf_doc
+                                  ? `${item.base_url}/${item.pdf_doc}`
+                                  : null;
+                              if (pdfUrl) {
+                                this.props.navigation.navigate('MyPDFViewer', {
+                                  pdfUrl,
+                                });
+                              } else {
+                                Toast.show('PDF URL not found');
+                              }
                             }}
-                            style={styles.pdfcontainer}>
-                            <Text style={styles.pdfText}>View PDF</Text>
-                          </TouchableOpacity>
-                        </View>
-                        {/* <GallaryImages
-                          baseUlr={item?.base_url}
-                          images={item?.images}
-                        /> */}
-                      </View>
-                    ) : (
-                      <View>
-                        <Text style={styles.TextContainer_enddate}>
-                          End Time
-                        </Text>
-                        <View style={styles.RectangleContainer_3}>
-                          <TextInput
-                            editable={false}
-                            placeholder="select time"
-                            style={{
-                              marginLeft: '10%',
-                              color: '#000',
-                              fontSize: 14,
-                              padding: 5,
-                            }}
-                            value={this.state.currentTime}></TextInput>
-                          <Image
-                            style={{
-                              marginLeft: '35%',
-                              width: 30,
-                              height: 30,
-                              marginRight: 15,
-                            }}
-                            source={require('../../images/time.png')}
-                          />
-                        </View>
-                        {/* <TouchableOpacity style={styles.RectangleContainer_3}
-                                                    onPress={this.showEndTimePicker} >
-                                                    <TextInput editable={false}
-                                                        placeholder="select time"
-                                                        style={{ marginLeft: "3%", color: '#000', fontSize: 14, padding: 5 }}
-                                                        value={this.state.endTimeSelected_time} ></TextInput>
-                                                    <DateTimePickerModal
-                                                        isVisible={this.state.isEndTimePickerVisible}
-                                                        mode="time"
-                                                        headerTextIOS=""
-                                                        onConfirm={this.handleEndTimePicked}
-                                                        onCancel={this.hideEndTimePicker}
-                                                        amPmAriaLabel="Select AM/PM"
-                                                        is24Hour={false}
-                                                    />
-                                                    <Image style={{ width: 30, height: 30 }} source={require('../../images/time.png')} />
-                                                </TouchableOpacity> */}
-                        <GallaryImages
-                          baseUlr={item?.base_url}
-                          images={item?.images}
-                        />
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                          }}>
-                          <TouchableOpacity
-                            onPress={() => this.completejob(item.id)}
-                            style={{
-                              ...styles.TextContainer_9,
-                              width: '50%',
-                            }}>
-                            <Text style={styles.TextContainer_10}>
-                              Complete Job
+                            style={styles.TextContainer_9}>
+                            <Text style={styles.pdfText} numberOfLines={1}>
+                              View PDF
                             </Text>
                           </TouchableOpacity>
-                          {item.pdf_doc && (
-                            <TouchableOpacity
-                              onPress={() => {
-                                // const url = `${item?.base_url}/${item.pdf_doc}`;
-                                // checkPermission(url);
-                                // Toast.show('Downloading..');
-                                // // Linking.openURL(
-                                // //   `${item?.base_url}/${item.pdf_doc}`,
-                                // // );
-                                this.props.navigation.navigate('MyPDFViewer', {
-                                  pdfUrl: `${item?.base_url}/${item.pdf_doc}`,
-                                });
-                              }}
-                              style={styles.pdfcontainer}>
-                              <Text style={styles.pdfText}>View PDF</Text>
-                            </TouchableOpacity>
-                          )}
-                        </View>
+                        )}
                       </View>
-                    )}
-                  </View>
+                    </>
+                  )}
                 </View>
               </View>
             )}
             keyExtractor={(_, index) => index.toString()}
-            onEndReached={this.handleLoadMore}
-            ListFooterComponent={this.footerList}
           />
+          <View style={{backgroundColor: '#fff'}}>
+            <PageNumber
+              onPressNumber={(page) => {
+                this.get_JobList(page);
+              }}
+              numberofPage={this.state.numberofPage}
+            />
+          </View>
         </View>
         <Loader isLoader={this.state.loading}></Loader>
       </View>

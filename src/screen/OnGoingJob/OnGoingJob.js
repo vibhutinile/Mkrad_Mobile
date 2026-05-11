@@ -24,6 +24,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loader from '../../NetworkCall/Loader';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
+import GallaryImages from '../../components/pagination/GallaryImages';
 
 let imageList = [];
 let CameraImageList = [];
@@ -83,6 +84,7 @@ class OnGoingJobScreen extends React.Component {
 
   async componentDidMount() {
     let {imageUrl} = await this.props.route.params;
+    console.log('[OnGoingJob] route.params received:', this.props.route.params);
     current_time = moment().format('hh:mm A');
     this.setState({currentTime: current_time});
     this.setState({filePath: `file://${imageUrl}`});
@@ -342,11 +344,15 @@ class OnGoingJobScreen extends React.Component {
             style={styles.BackContainer}>
             <Image source={require('../../images/back.png')} />
           </TouchableOpacity>
-          <View style={{alignSelf: 'center', marginTop: 18, marginLeft: 15}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#898989'}}>
-              Ongoing job
-            </Text>
-          </View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#898989',
+              marginLeft: 12,
+            }}>
+            Ongoing job
+          </Text>
         </View>
         <ScrollView>
           <View style={{flex: 4}}>
@@ -354,16 +360,32 @@ class OnGoingJobScreen extends React.Component {
               <AppLoader ref={loaderRef} />
             </View>
             <View style={styles.JobItemContainer}>
-              <View style={{marginLeft: 20}}>
-                <View style={{flexDirection: 'row', marginTop: 10}}>
+              <View>
+                <View style={{flexDirection: 'row'}}>
                   <Text style={styles.TextContainer_4}>
-                    {' '}
-                    {this.state.customerName}{' '}
+                    {this.state.customerName}
                   </Text>
                 </View>
                 <this.Separator />
 
-                <Text style={styles.TextContainer_15}>Address</Text>
+                <View style={{flexDirection: 'row', marginTop: 4}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.addressLink(this.state.lat, this.state.long)
+                    }
+                    style={styles.TextContainer_6}>
+                    <Text
+                      style={[
+                        styles.TextContainer_7,
+                        {color: '#3AB34A', textDecorationLine: 'underline'},
+                      ]}>
+                      {'Link to address'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <this.Separator />
+
+                <Text style={styles.TextContainer_5}> Address</Text>
                 {this.state.address2 == null ? (
                   <Text style={styles.TextContainer_6}>
                     {' '}
@@ -385,22 +407,7 @@ class OnGoingJobScreen extends React.Component {
                   </Text>
                 )}
                 <this.Separator />
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.addressLink(this.state.lat, this.state.long)
-                    }
-                    style={styles.TextContainer_6}>
-                    <Text
-                      style={[
-                        styles.TextContainer_7,
-                        {color: '#3AB34A', textDecorationLine: 'underline'},
-                      ]}>
-                      {'Link to address'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <this.Separator />
+
                 <TouchableOpacity
                   onPress={() => this.dialCall(this.state.phoneNo)}
                   style={styles.ViewCall}>
@@ -413,51 +420,75 @@ class OnGoingJobScreen extends React.Component {
                   </Text>
                 </TouchableOpacity>
                 <this.Separator />
+
                 <Text style={styles.TextContainer_5}> Scheduled Date</Text>
                 <Text style={styles.TextContainer_6}>
                   {' '}
                   {this.state.job_date}
                 </Text>
                 <this.Separator />
-                <Text style={styles.TextContainer_5}> Scheduled time</Text>
-                <Text style={styles.TextContainer_6}>
-                  {' '}
-                  {this.state.startTime}
-                </Text>
-                <this.Separator />
+
                 <Text style={styles.TextContainer_5}> Scheduled service</Text>
                 <Text style={styles.TextContainer_6}>
                   {' '}
                   {this.state.serviceName}
                 </Text>
                 <this.Separator />
+
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.TextContainer_5}> Mulch</Text>
+                    <Text style={styles.TextContainer_6}>
+                      {' '}
+                      {this.props.route.params?.mulchName || 'N/A'}
+                    </Text>
+                  </View>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.TextContainer_5}> Amount</Text>
+                    <Text style={styles.TextContainer_6}>
+                      {' '}
+                      {this.props.route.params?.totalBags != null &&
+                      this.props.route.params?.totalBags !== ''
+                        ? this.props.route.params.totalBags
+                        : 'N/A'}
+                    </Text>
+                  </View>
+                </View>
+                <this.Separator />
+
+                <Text style={styles.TextContainer_5}> Turf</Text>
+                <Text style={styles.TextContainer_6}>
+                  {' '}
+                  {this.props.route.params?.turfName || 'N/A'}
+                </Text>
+                <this.Separator />
+
                 <Text style={styles.TextContainer_enddate}>End Time</Text>
                 <View style={styles.RectangleContainer_3}>
-                  {/* onPress={this.showTimePicker}  */}
                   <TextInput
                     editable={false}
                     placeholder="select time"
+                    textAlignVertical="center"
+                    includeFontPadding={false}
                     style={{
-                      marginLeft: '13%',
+                      flex: 1,
                       color: '#000',
                       fontSize: 14,
-                      padding: 5,
+                      paddingHorizontal: 10,
+                      paddingVertical: 0,
                     }}
                     value={this.state.currentTime}></TextInput>
-                  {/* <DateTimePickerModal
-                                        isVisible={this.state.isTimePickerVisible}
-                                        mode="time"
-                                        headerTextIOS=""
-                                        onConfirm={this.handleTimePicked}
-                                        onCancel={this.hideTimePicker}
-                                        amPmAriaLabel="Select AM/PM"
-                                        is24Hour={false}
-                                    /> */}
                   <Image
-                    style={{marginLeft: '35%', width: 30, height: 30}}
+                    style={{width: 24, height: 24, marginRight: 8}}
                     source={require('../../images/time.png')}
                   />
                 </View>
+                {this.props.route.params?.images?.length > 0 ? (
+                  <GallaryImages
+                    baseUlr={this.props.route.params?.baseUrl}
+                    images={this.props.route.params?.images}
+                  />
+                ) : null}
               </View>
             </View>
           </View>

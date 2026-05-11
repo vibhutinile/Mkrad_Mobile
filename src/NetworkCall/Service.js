@@ -91,6 +91,18 @@ export const requestGetApi = async (endPoint, body, method, token) => {
 
     if (code == 200) {
       let responseJson = await response.json();
+      if (
+        endPoint &&
+        (endPoint.includes('crew-lead/job/list/updated') ||
+          endPoint.includes('crew-lead/job/pause'))
+      ) {
+        try {
+          console.log(
+            `[API_RESPONSE] ${endPoint}\n` +
+              JSON.stringify(responseJson, null, 2),
+          );
+        } catch (e) {}
+      }
       return {responseJson: responseJson, err: null, code: code};
     } else if (code == 400) {
       let responseJson = await response.json();

@@ -54,14 +54,15 @@ class DashboardNotification extends React.Component {
             style={styles.BackContainer}>
             <Image source={require('./../images/back.png')} />
           </TouchableOpacity>
-          {/* <View style={styles.NotificationContainer}>
-                        <Text style={{ fontSize: 18, fontStyle: 'italic', fontWeight: 'bold', color: '#3AB34A', }} >06</Text>
-                    </View> */}
-          <View style={{alignSelf: 'center', marginTop: 18, marginLeft: 15}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#898989'}}>
-              Notifications
-            </Text>
-          </View>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#898989',
+              marginLeft: 12,
+            }}>
+            Notifications
+          </Text>
         </View>
 
         <View style={{flex: 5}}>
@@ -105,26 +106,41 @@ class DashboardNotification extends React.Component {
 
 const styles = StyleSheet.create({
   CradContainer: {
-    flex: 1,
+    height: 80,
     flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    paddingHorizontal: 16,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
 
   BackContainer: {
-    width: '10%',
-    height: '30%',
-    marginLeft: '5%',
-    marginTop: '15%',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  NotificationBadge: {
+    minWidth: 28,
+    height: 28,
+    paddingHorizontal: 8,
+    borderRadius: 14,
+    backgroundColor: '#3AB34A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  NotificationBadgeText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: 'bold',
   },
 
   NotificationContainer: {

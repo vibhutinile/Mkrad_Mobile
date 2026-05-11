@@ -224,38 +224,34 @@ class CrewLeadAttendanceLog extends React.Component {
       <View style={{flex: 1}}>
         <View style={styles.CradContainer}>
           <TouchableOpacity
+            activeOpacity={0.5}
             onPress={this.OnbackClick}
             style={styles.BackContainer}>
             <Image source={require('../images/back.png')} />
           </TouchableOpacity>
           <Text
             style={{
-              marginTop: 10,
               fontSize: 18,
               fontWeight: 'bold',
-              marginLeft: '5%',
+              color: '#898989',
+              marginLeft: 12,
             }}>
             View Attendance Logs
           </Text>
         </View>
 
-        <View style={{flex: 5, marginTop: '10%', marginLeft: '5%'}}>
+        <View style={{flex: 5, paddingTop: 16, paddingHorizontal: 16}}>
           <View>
             <AppLoader ref={loaderRef} />
           </View>
-          <View style={{flexDirection: 'row', height: '10%'}}>
+          <View style={styles.dateRow}>
             <TouchableOpacity
               style={styles.RectangleContainer_2}
               onPress={this.showDatePicker}>
               <TextInput
                 editable={false}
                 placeholder="Start date"
-                style={{
-                  alignSelf: 'center',
-                  marginLeft: '5%',
-                  color: '#000',
-                  fontSize: 14,
-                }}
+                style={styles.dateInput}
                 value={this.state.oneTimeSelected_date}></TextInput>
               <DateTimePickerModal
                 isVisible={this.state.isDatePickerVisible}
@@ -273,12 +269,7 @@ class CrewLeadAttendanceLog extends React.Component {
               <TextInput
                 editable={false}
                 placeholder="End date"
-                style={{
-                  alignSelf: 'center',
-                  marginLeft: '5%',
-                  color: '#000',
-                  fontSize: 14,
-                }}
+                style={styles.dateInput}
                 value={this.state.secondTimeSelected_date}></TextInput>
               <DateTimePickerModal
                 isVisible={this.state.isEndDatePickerVisible}
@@ -293,9 +284,9 @@ class CrewLeadAttendanceLog extends React.Component {
           <FlatList
             data={this.state.frequency_list}
             renderItem={({item}) => (
-              <View>
+              <View style={styles.logCard}>
                 <Text style={styles.date}>{item.check_in_date}</Text>
-                <View style={{flexDirection: 'row', marginLeft: '6%'}}>
+                <View style={styles.workingHoursRow}>
                   <Text style={styles.text1}>Total working Hours</Text>
                   {item.check_out_time == null ||
                   item.check_out_time == '' ? null : (
@@ -308,19 +299,19 @@ class CrewLeadAttendanceLog extends React.Component {
                   )}
                 </View>
 
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity style={styles.crewMemberCheckIn}>
+                <View style={styles.signInOutRow}>
+                  <View style={styles.crewMemberCheckIn}>
                     <Text style={styles.puchText}>Sign In</Text>
                     <Text style={styles.frequencyText}>
-                      {item.check_in_time}
+                      {item.check_in_time || '—'}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.crewMemberCheckIn}>
+                  </View>
+                  <View style={styles.crewMemberCheckIn}>
                     <Text style={styles.puchText}>Sign Out</Text>
                     <Text style={styles.frequencyText}>
-                      {item.check_out_time}
+                      {item.check_out_time || '—'}
                     </Text>
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             )}
@@ -336,20 +327,18 @@ class CrewLeadAttendanceLog extends React.Component {
 
 const styles = StyleSheet.create({
   CradContainer: {
-    height: 100,
+    height: 80,
     flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    paddingHorizontal: 16,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
-    alignItems: 'center',
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   ViewBg: {
     width: '40%',
@@ -369,65 +358,85 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginBottom: 10,
   },
-  crewMemberCheckIn: {
-    width: '40%',
-    height: 60,
-    backgroundColor: '#DEDEDE',
-    marginTop: '4%',
-    borderRadius: 14,
-    borderColor: '#ddd',
+  dateRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  dateInput: {
+    flex: 1,
+    color: '#000',
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 0,
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+  },
+  RectangleContainer_2: {
+    flex: 1,
+    height: 44,
+    borderColor: '#3AB34A',
+    borderWidth: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: 10,
+    marginHorizontal: 4,
+    overflow: 'hidden',
+  },
+  logCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 12,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
+    shadowOpacity: 0.1,
     shadowRadius: 3,
-    elevation: 5,
-    shadowRadius: 10,
-    marginLeft: '5%',
-    marginBottom: 10,
-    justifyContent: 'center',
-  },
-  frequencyText: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
+    elevation: 2,
   },
   date: {
     color: '#000',
     fontSize: 14,
     fontWeight: 'bold',
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 5,
+    marginBottom: 6,
+  },
+  workingHoursRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   text1: {
     color: 'green',
     fontSize: 12,
     fontWeight: 'bold',
-    marginTop: '1%',
   },
   text2: {
     color: '#939397',
     fontSize: 12,
     fontWeight: 'bold',
-    marginTop: '1%',
-    marginLeft: '20%',
   },
-  RectangleContainer_2: {
-    width: '40%',
-    marginTop: '3%',
-    borderColor: '#3AB34A',
-    borderWidth: 1,
-    alignItems: 'center',
-    marginLeft: '3%',
+  signInOutRow: {
     flexDirection: 'row',
-    height: '60%',
-    borderRadius: 10,
+  },
+  crewMemberCheckIn: {
+    flex: 1,
+    height: 60,
+    backgroundColor: '#DEDEDE',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    marginHorizontal: 4,
+  },
+  frequencyText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 2,
   },
   puchText: {
     color: '#000',
-    fontSize: 14,
-    marginLeft: 10,
+    fontSize: 13,
+    fontWeight: '600',
   },
   MenuContainer: {
     marginLeft: 20,
@@ -443,8 +452,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   BackContainer: {
-    alignSelf: 'center',
-    marginLeft: '5%',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   RectangleContainer: {
     width: '65%',

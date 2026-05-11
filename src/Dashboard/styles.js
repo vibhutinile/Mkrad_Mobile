@@ -7,20 +7,33 @@ const styles = StyleSheet.create({
 
   CradContainer: {
     flex: 2,
-    flexDirection: 'row',
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
     elevation: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 28,
+  },
+  NotificationButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+  NotificationIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
   MenuContainer: {
     marginLeft: 20,
@@ -31,56 +44,69 @@ const styles = StyleSheet.create({
 
   },
   MkradContainer: {
-    width: "22%", height: 250, alignSelf: 'center', resizeMode: 'contain'
+    width: 140,
+    height: 140,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    marginTop: 8,
   },
 
   RectangleContainer: {
-    width: "55%",
-    height: "25%",
+    width: '50%',
+    height: 44,
     backgroundColor: '#3AB34A',
     alignSelf: 'center',
-    borderRadius: 14,
-    borderColor: '#ddd',
+    borderRadius: 22,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
-    shadowRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
-    bottom: "-13%",
-    left: "25%"
-
+    bottom: -22,
+    alignSelf: 'center',
   },
 
   Bottombar: {
-    width: 40,
-    height: 40,
-    marginTop: "13%",
-    marginBottom: 43,
+    flex: 1,
+    height: 84,
     alignItems: 'center',
-    marginHorizontal: "11.5%"
+    justifyContent: 'center',
   },
 
 
   JobItemContainer: {
-    width: "78%",
-    height: "18%",
-    marginTop: "6%",
+    width: '86%',
+    height: 80,
+    marginTop: 18,
     backgroundColor: '#fff',
     alignSelf: 'center',
     borderRadius: 14,
-    borderColor: '#ddd',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
-    shadowRadius: 10,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+  },
+
+  JobItemTitle: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: '#898989',
+    flex: 1,
+    textAlign: 'center',
+  },
+
+  JobItemArrow: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
 
   JobItemContainer2: {

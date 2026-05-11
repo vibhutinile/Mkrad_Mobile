@@ -1,104 +1,141 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native';
 
+const styles = StyleSheet.create({
+  // ── Welcome screen (index.js) ──────────────────────────────
+  welcomeHeader: {
+    height: 260,
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 28,
+  },
+  welcomeLogo: {
+    width: 160,
+    height: 160,
+    resizeMode: 'contain',
+  },
+  welcomePill: {
+    alignSelf: 'center',
+    backgroundColor: '#3AB34A',
+    width: '50%',
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -22,
+    zIndex: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  welcomePillText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  welcomeBody: {
+    flex: 1,
+    paddingTop: 60,
+    paddingHorizontal: 24,
+    backgroundColor: '#f3f3f3',
+    alignItems: 'center',
+  },
 
-const styles = StyleSheet.create(
-    {
-  
-      container: {
-        flex: 1,
-        justifyContent: 'center',
-        marginHorizontal: 30,
-        flexDirection:'column'
-  
-      },
-      separator: {
-        marginVertical: 5,
-        borderBottomColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-      },
-      LoginButtonStyle: {
-        alignContent: "center",
-        backgroundColor: '#3AB34A',
-        borderRadius:30,
-        borderWidth: 3,
-        borderColor: '#fff',
-        height:"20%",
-        marginTop:"2%",
-        height:"35%",
-        alignSelf:'center',
-        width:'60%',
-        alignItems:'center',justifyContent:'center'
-       
-      },
+  // ── Buttons ─────────────────────────────────────────────────
+  LoginButtonStyle: {
+    backgroundColor: '#3AB34A',
+    borderRadius: 30,
+    width: '70%',
+    height: 56,
+    marginTop: 12,
+    marginBottom: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  TextStyle: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 22,
+    marginTop: 12,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+  },
+  TextStyle2: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  TextStyle3: {
+    color: '#000',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 24,
+  },
+  TextStyle4: {
+    color: '#3AB34A',
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
 
-      LoginButtonStyle_2: {
-        alignContent: "center",
-        backgroundColor: '#609E79',
-        borderRadius: 30,
-        borderWidth: 3,
-        borderColor: '#fff',
-        width:300,
-        height:"15%",
-       marginTop:"1%"
-      },
-  
-      SignupButtonStyle: {
-        width:250,
-        backgroundColor: '#222441',
-        borderRadius: 30,
-        borderWidth: 3,
-        borderColor: '#fff',
-        height:"45%",
+  // ── Legacy styles kept for back-compat ─────────────────────
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 30,
+    flexDirection: 'column',
+  },
+  separator: {
+    marginVertical: 5,
+    borderBottomColor: '#fff',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  LoginButtonStyle_2: {
+    backgroundColor: '#609E79',
+    borderRadius: 30,
+    width: 300,
+    height: 56,
+    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  SignupButtonStyle: {
+    width: 250,
+    backgroundColor: '#222441',
+    borderRadius: 30,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  AdminButtonStyle: {
+    backgroundColor: '#E8E8E8',
+    marginBottom: 30,
+    height: 8,
+  },
+  AdminButtonStyle2: {
+    backgroundColor: '#E8E8E8',
+    height: '30%',
+    marginTop: '30%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
-      },
-  
-      AdminButtonStyle: {
-        resizeMode:'contain',
-        backgroundColor:'#E8E8E8',
-        flex:.5,
-        marginBottom:"8%",
-        height:"5%",
-      
-      },
-
-      AdminButtonStyle2: {
-        resizeMode:'contain',
-        backgroundColor:'#E8E8E8',
-        height:"30%",
-        marginTop:'30%',
-        alignItems:'center',justifyContent:'center'
-      
-      },
-      TextStyle: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 22,
-        marginTop:"3%",
-        fontWeight:'bold',
-        fontStyle: 'italic',
-      },
-      TextStyle2: {
-        color: '#fff',
-        fontSize:18,
-        alignSelf:'center',
-        fontWeight:'bold',
-      },
-      TextStyle3: {
-        color: '#000',
-        fontSize:18,
-        alignSelf:'center',
-        fontWeight:'bold',
-        marginTop:'5%'
-      },
-      TextStyle4: {
-        color: '#3AB34A',
-        textAlign: 'center',
-        fontSize: 22,
-        fontWeight:'bold',
-        alignSelf:'center',
-        justifyContent:'center'
-      },
-
-    }
-  )
-  export default styles 
+export default styles;

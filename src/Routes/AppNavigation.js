@@ -1,8 +1,10 @@
 // In App.js in a new project
 
 import * as React from 'react';
+import {View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import ProfileScreen from './../screen/Profile/index';
 import LoginPage from '../screen/Login/LoginDetails';
 import SignUpPage from '../screen/Signup/Signup_index';
@@ -66,11 +68,37 @@ import AdminCrewAttendanceLog from '../AdminPanel/AdminCrewAttendanceLog';
 import ImageScreen from '../components/ImageScreen';
 import MyPDFViewer from '../screen/PdfViewer/MyPdfViewer';
 const Stack = createStackNavigator();
+
+// Wraps every screen with safe-area padding (top + bottom + sides) so headers
+// don't collide with the status bar / notch and footers don't sit under the
+// iOS home indicator / Android gesture bar. Applied via Stack.Navigator's
+// `screenLayout` so each screen gets it automatically.
+//
+// IMPORTANT: backgroundColor is intentionally transparent so the screen's own
+// background (white header, gray body, etc.) reaches the status bar / bottom
+// edge. Each screen sets its own backgroundColor on its root View.
+// Top + sides only. Bottom inset is intentionally NOT applied here — screens
+// that have a bottom tab/footer manage their own bottom safe-area so the
+// footer's background color extends into the gesture-bar / home-indicator
+// region. Screens without a footer can wrap their content in their own
+// SafeAreaView with edges={['bottom']} if needed.
+const SafeScreenLayout = ({children}) => (
+  <SafeAreaView
+    style={{flex: 1, backgroundColor: 'transparent'}}
+    edges={['top', 'left', 'right']}>
+    {children}
+  </SafeAreaView>
+);
+
 //initialRouteName="AdminJobScheduleList"
 function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        screenLayout={({children}) => (
+          <SafeScreenLayout>{children}</SafeScreenLayout>
+        )}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen
           name="LoginScreen"

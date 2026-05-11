@@ -7,7 +7,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
-// import Entypo from 'react-native-vector-icons/Entypo'
+
+const BRAND_GREEN = '#3AB34A';
+const BRAND_GREEN_DISABLED = '#C8E6C9';
+
 const PageNumber = ({numberofPage, onPressNumber}) => {
   const [selectedPage, setSelectedPage] = useState(1);
   const data = Array.from({length: numberofPage}, (_, index) => index + 1);
@@ -23,7 +26,7 @@ const PageNumber = ({numberofPage, onPressNumber}) => {
     setCurrentPage(pageNumber);
   };
 
-  if (numberofPage === 0) return null;
+  if (!numberofPage || numberofPage <= 1) return null;
 
   return (
     <View style={styles.renderContainer}>
@@ -36,16 +39,13 @@ const PageNumber = ({numberofPage, onPressNumber}) => {
         ]}>
         <Image
           source={require('../../images/back.png')}
-          style={[
-            styles.arrowImage,
-            // {tintColor: isNextButtonDisabled ? 'gray' : 'green'},
-          ]}
+          style={styles.arrowImage}
         />
-        {/* <Entypo name='chevron-small-left' size={25} color={'#fff'}/> */}
       </TouchableOpacity>
 
       {currentPage > 5 && (
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.ellipsisRow}>
+          <View style={styles.ellipsis} />
           <View style={styles.ellipsis} />
           <View style={styles.ellipsis} />
         </View>
@@ -58,23 +58,35 @@ const PageNumber = ({numberofPage, onPressNumber}) => {
           currentPage * itemsPerPage,
         )}
         horizontal
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedPage(item);
-              onPressNumber(item);
-            }}
-            style={[
-              styles.ellipsisContainer,
-              {backgroundColor: item === selectedPage ? 'green' : null},
-            ]}>
-            <Text>{item}</Text>
-          </TouchableOpacity>
-        )}
+        keyExtractor={(item) => item.toString()}
+        renderItem={({item}) => {
+          const isSelected = item === selectedPage;
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedPage(item);
+                onPressNumber(item);
+              }}
+              activeOpacity={0.7}
+              style={[
+                styles.pageItem,
+                isSelected && styles.pageItemSelected,
+              ]}>
+              <Text
+                style={[
+                  styles.pageText,
+                  isSelected && styles.pageTextSelected,
+                ]}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          );
+        }}
       />
 
       {currentPage < totalPages - 5 && (
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.ellipsisRow}>
+          <View style={styles.ellipsis} />
           <View style={styles.ellipsis} />
           <View style={styles.ellipsis} />
         </View>
@@ -87,13 +99,9 @@ const PageNumber = ({numberofPage, onPressNumber}) => {
           styles.arrowImage,
           {backgroundColor: isNextButtonDisabled ? 'gray' : 'green'},
         ]}>
-        {/* <Entypo name='chevron-small-right' size={25} color={'#fff'}/> */}
         <Image
           source={require('../../images/next_arrow.png')}
-          style={[
-            styles.arrowImage,
-            // {tintColor: isNextButtonDisabled ? 'gray' : 'green'},
-          ]}
+          style={styles.arrowImage}
         />
       </TouchableOpacity>
     </View>
@@ -103,28 +111,12 @@ const PageNumber = ({numberofPage, onPressNumber}) => {
 export default PageNumber;
 
 const styles = StyleSheet.create({
-  ellipsisContainer: {
-    height: 35,
-    width: 35,
-    borderColor: 'green',
-    borderWidth: 1,
-    margin: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ellipsis: {
-    height: 6,
-    width: 6,
-    borderRadius: 5,
-    backgroundColor: 'green',
-    margin: 1.8,
-  },
   renderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 10,
     justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
   },
   arrowImage: {
     height: 35,
@@ -132,5 +124,40 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  pageItem: {
+    height: 36,
+    minWidth: 36,
+    paddingHorizontal: 6,
+    borderColor: BRAND_GREEN,
+    borderWidth: 1,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  pageItemSelected: {
+    backgroundColor: BRAND_GREEN,
+  },
+  pageText: {
+    color: BRAND_GREEN,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  pageTextSelected: {
+    color: '#fff',
+  },
+  ellipsisRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 4,
+  },
+  ellipsis: {
+    height: 4,
+    width: 4,
+    borderRadius: 2,
+    backgroundColor: BRAND_GREEN,
+    marginHorizontal: 1.5,
   },
 });

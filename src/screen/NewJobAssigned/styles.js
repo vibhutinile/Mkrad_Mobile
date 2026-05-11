@@ -2,26 +2,25 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   CradContainer: {
-    flex: 1,
+    height: 80,
     flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 15,
-    shadowRadius: 30,
-    borderWidth: 0,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    paddingHorizontal: 16,
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
 
   BackContainer: {
-    width: '10%',
-    height: '30%',
-    marginLeft: '5%',
-    marginTop: '15%',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   NotificationContainer: {
@@ -40,19 +39,19 @@ const styles = StyleSheet.create({
   },
 
   JobItemContainer: {
-    width: 350,
-    marginTop: '5%',
+    width: '92%',
+    marginTop: 16,
+    marginBottom: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
     backgroundColor: '#fff',
     alignSelf: 'center',
     borderRadius: 14,
-    borderColor: '#ddd',
     shadowColor: '#000000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
-    shadowRadius: 10,
-    marginBottom: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
 
   TextContainer: {
@@ -85,8 +84,6 @@ const styles = StyleSheet.create({
   TextContainer_4: {
     fontWeight: 'bold',
     fontSize: 18,
-    marginTop: '0%',
-    alignSelf: 'center',
     color: '#000',
   },
   TextContainer_5: {
@@ -101,8 +98,10 @@ const styles = StyleSheet.create({
     borderColor: '#3AB34A',
     borderWidth: 2,
     alignItems: 'center',
-    height: 35,
+    minHeight: 44,
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
   },
   TextContainer_6: {
     fontWeight: 'normal',
@@ -129,15 +128,15 @@ const styles = StyleSheet.create({
   },
 
   TextContainer_9: {
-    borderRadius: 25,
+    borderRadius: 22,
     backgroundColor: '#3AB34A',
     alignItems: 'center',
     justifyContent: 'center',
-
-    width: '45%',
-    padding: 10,
-    marginRight: 20,
-    bottom: 20,
+    minHeight: 40,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    marginHorizontal: 6,
+    marginBottom: 10,
   },
   TextContainer_10: {
     fontWeight: 'normal',

@@ -8,10 +8,10 @@ import {
   Button,
   Image,
   StyleSheet,
-  SafeAreaView,
   Alert,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {getAsyncStorage} from '../Routes/AsynstorageClass';
 import styles from './styles';
@@ -56,8 +56,18 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#f3f3f3'}}>
         <View style={styles.CradContainer}>
+          <TouchableOpacity
+            style={styles.NotificationButton}
+            onPress={() =>
+              this.props.navigation.navigate('DashboardNotification')
+            }>
+            <Image
+              style={styles.NotificationIcon}
+              source={require('./../images/notification.png')}
+            />
+          </TouchableOpacity>
           <Image
             style={styles.MkradContainer}
             source={require('./../images/logo.png')}
@@ -65,7 +75,6 @@ class Dashboard extends React.Component {
           <View style={styles.RectangleContainer}>
             <Text
               style={{
-                marginTop: 12,
                 fontSize: 18,
                 fontWeight: 'bold',
                 color: '#fff',
@@ -73,73 +82,48 @@ class Dashboard extends React.Component {
               Home
             </Text>
           </View>
-          <TouchableOpacity
-            style={{position: 'absolute', marginTop: '15%', right: '5%'}}
-            onPress={() =>
-              this.props.navigation.navigate('DashboardNotification')
-            }>
-            <Image
-              style={styles.NotificationConrainer}
-              source={require('./../images/notification.png')}
-            />
-          </TouchableOpacity>
         </View>
 
         <View style={{flex: 5, marginTop: 30}}>
           {/* <Text style={{ fontWeight: 'bold', fontSize: 18, color: '#201A4B', marginTop: "15%", marginLeft: "8%" }}>Hey !</Text> */}
           {/* <Text style={{ fontWeight: 'bold',fontSize: 18, color: '#000000', marginTop: "0%", marginLeft: "8%" }}>{this.state.ussername}</Text> */}
 
-          <View
-            onStartShouldSetResponder={() =>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() =>
               this.props.navigation.navigate('NewJobAssignScreen')
             }
             style={styles.JobItemContainer}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 14,
-                marginLeft: '10%',
-                color: '#898989',
-              }}>
-              Scheduled Jobs
-            </Text>
+            <Text style={styles.JobItemTitle}>Scheduled Jobs</Text>
             <Image
-              style={{}}
-              source={require('../images/next_arrow.png')}></Image>
-          </View>
-          {/* <View
-           onStartShouldSetResponder={() => this.props.navigation.navigate("CompletedJob")}
+              style={styles.JobItemArrow}
+              source={require('../images/next_arrow.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => this.props.navigation.navigate('OnPauseScreen')}
             style={styles.JobItemContainer}>
-            <Text style={{ fontWeight: 'bold', fontSize: 14, marginLeft: "10%", fontStyle: 'italic', color: '#898989' }}>Completed Jobs</Text>
-            <Image style={{ marginLeft: "30%" }} source={require('../images/next_arrow.png')}></Image>
-          </View> */}
-          <View
-            onStartShouldSetResponder={() =>
-              this.props.navigation.navigate('OnPauseScreen')
-            }
-            style={styles.JobItemContainer}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 14,
-                marginLeft: '10%',
-                color: '#898989',
-              }}>
-              Paused Jobs
-            </Text>
+            <Text style={styles.JobItemTitle}>Paused Jobs</Text>
             <Image
-              style={{}}
-              source={require('../images/next_arrow.png')}></Image>
-          </View>
+              style={styles.JobItemArrow}
+              source={require('../images/next_arrow.png')}
+            />
+          </TouchableOpacity>
         </View>
 
-        <View
+        <SafeAreaView
+          edges={['bottom']}
           style={{
             backgroundColor: '#222441',
-            height: 84,
-            flexDirection: 'row',
-            alignItems: 'center',
           }}>
+          <View
+            style={{
+              backgroundColor: '#222441',
+              height: 84,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
           <View style={styles.Bottombar}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Dashboard')}
@@ -165,7 +149,8 @@ class Dashboard extends React.Component {
               />
             </TouchableOpacity>
           </View>
-        </View>
+          </View>
+        </SafeAreaView>
       </View>
     );
   }
