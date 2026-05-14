@@ -13,7 +13,7 @@ import {
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import styles from './resume_styles';
 import Modal from 'react-native-modal';
-import ImagePicker from '../../components/ImagePickerCompat';
+// import ImagePicker from '../../components/ImagePickerCompat';
 import {
   pauseJobPost,
   postResumejob,
@@ -193,27 +193,27 @@ class Resumejob extends React.Component {
     }
   };
 
-  chooseFile = () => {
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
+  // chooseFile = () => {
+  //   const options = {
+  //     title: 'Select Avatar',
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        const source = {uri: 'data:image/jpeg;base64,' + response.data};
+  //   ImagePicker.showImagePicker(options, (response) => {
+  //     if (response.didCancel) {
+  //     } else if (response.error) {
+  //     } else if (response.customButton) {
+  //     } else {
+  //       const source = {uri: 'data:image/jpeg;base64,' + response.data};
 
-        imageList.push(source);
-        this.setState({ImagePathFromGallery: imageList});
-      }
-    });
-  };
+  //       imageList.push(source);
+  //       this.setState({ImagePathFromGallery: imageList});
+  //     }
+  //   });
+  // };
 
   removeImage = (index) => {
     imageList.splice(index, 1);
@@ -380,7 +380,7 @@ class Resumejob extends React.Component {
                   />
                 </ScrollView>
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={styles.capture}
                     style={styles.RecatngleBox}
                     onPress={this.chooseFile}>
@@ -395,7 +395,7 @@ class Resumejob extends React.Component {
                     <Image
                       style={{position: 'absolute', bottom: '20%'}}
                       source={require('../../images/camera.png')}></Image>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
 
                   {/* <TouchableOpacity style={styles.RecatngleBox}
                                         onPress={this.chooseFile}>

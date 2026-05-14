@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Card} from 'react-native-shadow-cards';
-import ImagePicker from '../../../components/ImagePickerCompat';
+// import ImagePicker from '../../../components/ImagePickerCompat';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getAsyncStorage} from '../../../Routes/AsynstorageClass';
 import {
@@ -98,35 +98,35 @@ class AdminEditProfile extends React.Component {
     }
   };
 
-  chooseFile = async () => {
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
+  // chooseFile = async () => {
+  //   const options = {
+  //     title: 'Select Avatar',
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
 
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: 'We need your permission',
-      },
-    );
+  //   const granted = await PermissionsAndroid.request(
+  //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //     {
+  //       title: 'We need your permission',
+  //     },
+  //   );
 
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      ImagePicker.showImagePicker(options, (response) => {
-        if (response.didCancel) {
-        } else if (response.error) {
-        } else if (response.customButton) {
-        } else {
-          const source = {uri: 'data:image/jpeg;base64,' + response.data};
-          this.setState({filePath: source.uri});
-        }
-      });
-    } else {
-    }
-  };
+  //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //     ImagePicker.showImagePicker(options, (response) => {
+  //       if (response.didCancel) {
+  //       } else if (response.error) {
+  //       } else if (response.customButton) {
+  //       } else {
+  //         const source = {uri: 'data:image/jpeg;base64,' + response.data};
+  //         this.setState({filePath: source.uri});
+  //       }
+  //     });
+  //   } else {
+  //   }
+  // };
 
   render() {
     return (

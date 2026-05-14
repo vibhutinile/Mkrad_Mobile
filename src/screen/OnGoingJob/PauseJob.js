@@ -13,7 +13,7 @@ import {
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import styles from './OnGoingJob_styles';
 import Modal from 'react-native-modal';
-import ImagePicker from '../../components/ImagePickerCompat';
+// import ImagePicker from '../../components/ImagePickerCompat';
 import {
   pauseJobPost,
   crewlaedJobCompleted,
@@ -187,26 +187,26 @@ class PauseJob extends React.Component {
     }
   };
 
-  chooseFile = () => {
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
+  // chooseFile = () => {
+  //   const options = {
+  //     title: 'Select Avatar',
+  //     storageOptions: {
+  //       skipBackup: true,
+  //       path: 'images',
+  //     },
+  //   };
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        const source = {uri: 'data:image/jpeg;base64,' + response.data};
-        imageList.push(source);
-        this.setState({ImagePathFromGallery: imageList});
-      }
-    });
-  };
+  //   ImagePicker.showImagePicker(options, (response) => {
+  //     if (response.didCancel) {
+  //     } else if (response.error) {
+  //     } else if (response.customButton) {
+  //     } else {
+  //       const source = {uri: 'data:image/jpeg;base64,' + response.data};
+  //       imageList.push(source);
+  //       this.setState({ImagePathFromGallery: imageList});
+  //     }
+  //   });
+  // };
 
   removeImage = (index) => {
     imageList.splice(index, 1);
