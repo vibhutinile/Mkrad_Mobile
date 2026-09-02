@@ -79,7 +79,7 @@ export const requestGetApi = async (endPoint, body, method, token) => {
   };
 
   url = url + objToQueryString(body);
-  console.log('GET URL:-' + url + '\n');
+  console.log('[GET] START ' + url);
 
   try {
     let response = await fetch(url, {
@@ -87,36 +87,44 @@ export const requestGetApi = async (endPoint, body, method, token) => {
       headers: header,
     });
 
-    let code = await response.status;
+    let code = response.status;
+    console.log('[GET] STATUS ' + code + ' ' + url);
+
+    let responseText = '';
+    try {
+      responseText = await response.text();
+    } catch (readErr) {
+      console.log('[GET] READ_ERR ' + readErr.message);
+    }
+    console.log(
+      '[GET] BODY (' + responseText.length + ' bytes): ' + responseText.slice(0, 800),
+    );
 
     if (code == 200) {
-      let responseJson = await response.json();
-      if (
-        endPoint &&
-        (endPoint.includes('crew-lead/job/list/updated') ||
-          endPoint.includes('crew-lead/job/pause'))
-      ) {
-        try {
-          console.log(
-            `[API_RESPONSE] ${endPoint}\n` +
-              JSON.stringify(responseJson, null, 2),
-          );
-        } catch (e) {}
+      let responseJson;
+      try {
+        responseJson = JSON.parse(responseText);
+      } catch (parseErr) {
+        console.log('[GET] JSON_PARSE_ERR ' + parseErr.message);
+        return {responseJson: null, err: 'Invalid JSON from server', code: code};
       }
       return {responseJson: responseJson, err: null, code: code};
     } else if (code == 400) {
-      let responseJson = await response.json();
+      let responseJson = {};
+      try {
+        responseJson = JSON.parse(responseText);
+      } catch (e) {}
       return {responseJson: null, err: responseJson.message, code: code};
     } else {
       return {responseJson: null, err: 'Something went wrong!', code: code};
     }
   } catch (error) {
+    console.log('[GET] FETCH_ERR ' + (error && error.message ? error.message : error));
     return {
       responseJson: null,
       err: 'Something Went Wrong! Please check your internet connection.',
       code: 500,
     };
-    console.error(error);
   }
 };
 

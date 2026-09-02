@@ -69,7 +69,7 @@ class NewJobAssign extends React.Component {
     const body = {};
     this.setState({loading: true});
     const list_url =
-      page != 1 ? `${crewlaedjob_list}?page=${page}` : crewlaedjob_list;
+      page && page > 1 ? `${crewlaedjob_list}?page=${page}` : crewlaedjob_list;
     const {responseJson, err} = await requestGetApi(
       list_url,
       body,
